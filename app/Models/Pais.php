@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Ciudades extends Model
+class Pais extends Model
 {
   use HasFactory;
   use SoftDeletes;
 
-  protected $table = 'ciudades';
+  protected $table = 'paises';
 }

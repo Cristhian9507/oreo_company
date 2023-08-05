@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('identificacion', 11);
             $table->string('nombre', 100);
-            $table->integer('celular')->nullable();
+            $table->bigInteger('celular')->nullable();
             $table->date('fecha_nacimiento');
             $table->integer('ciudad_id');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->integer('perfil_id');
             $table->rememberToken();
             $table->softDeletes()->nullable();
             $table->timestamps();

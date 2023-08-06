@@ -42,3 +42,4 @@ Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios');
 Route::get('/buscar-paises', [PaisController::class, 'buscarPaises'])->name('buscar.paises');
 Route::get('/buscar-departamentos', [DepartamentoController::class, 'buscarDepartamentos'])->name('buscar.departamentos');
 Route::get('/buscar-ciudades', [CiudadController::class, 'buscarCiudades'])->name('buscar.ciudades');
+Route::get('/filtrar-usuarios', [UserController::class, 'filtrarUsuarios'])->name('filtrar-usuarios');

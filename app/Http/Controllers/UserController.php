@@ -63,4 +63,14 @@ class UserController extends Controller
   {
     //
   }
+
+  public function filtrarUsuarios(Request $request) {
+    $filtro = $request->filtro;
+    $usuarios = User::where('nombre', 'ilike', "%$filtro%")
+                  ->orWhere('identificacion', 'ilike', "%$filtro%")
+                  ->orWhere('celular', 'ilike', "%$filtro%")
+                  ->orWhere('email', 'ilike', "%$filtro%")
+                  ->get();
+    return view('usuarios.tabla_usuarios_filtrados', compact('usuarios'));
+  }
 }

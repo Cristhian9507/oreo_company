@@ -3,13 +3,22 @@
 @section('content')
 <div class="container">
   @if (session()->has('success'))
-    <div class="alert alert-success">
-      {{ session('success') }}
-    </div>
+  <div class="alert alert-success">
+    {{ session('success') }}
+  </div>
   @endif
   <h1 class="mb-4">Usuarios <a href="{{ route('formularioRegistro') }}" class="btn btn-secondary">Agregar usuario</a></h1>
-  <div class="form-group">
-    <input id="filtro" type="text" class="form-control" name="filtro" placeholder="Filtrar por nombre, cédula, email, celular">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group py-4">
+        <input id="filtro" type="text" class="form-control" name="filtro" placeholder="Filtrar por nombre, cédula, email, celular">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group py-4">
+        <a class="btn btn-success evt-filtrar" href="#">Filtrar</a>
+      </div>
+    </div>
   </div>
   <table class="table table-bordered" id="users-table">
     <thead>
@@ -23,7 +32,7 @@
         <th>Perfil</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="tablaUsuarios">
       @foreach($usuarios as $usuario)
       <tr>
         <td>{{ $usuario->id }}</td>
@@ -45,6 +54,35 @@
 <script>
   $(document).ready(function() {
     $('#users-table').DataTable();
+    $("body").on("click", ".evt-filtrar", function(e) {
+      e.preventDefault();
+      filtrarUsuarios();
+    });
+
+    $("body").on("keypress", "#filtro", function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        filtrarUsuarios();
+      }
+    });
+
+    function filtrarUsuarios() {
+      var filtro = $('#filtro').val();
+
+      $.ajax({
+        type: 'GET',
+        url: '{{ route('filtrar-usuarios') }}',
+        data: {
+          filtro: filtro
+        },
+        success: function(data) {
+          $('#tablaUsuarios').html(data);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+    }
   });
 </script>
 @endsection

@@ -12,4 +12,8 @@ class Ciudad extends Model
   use SoftDeletes;
 
   protected $table = 'ciudades';
+
+  public function departamento() {
+    return $this->belongsTo(Departamento::class, "departamento_id");
+  }
 }

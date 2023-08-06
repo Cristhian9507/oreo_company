@@ -12,4 +12,8 @@ class Departamento extends Model
   use SoftDeletes;
 
   protected $table = 'departamentos';
+
+  public function pais() {
+    return $this->belongsTo(Pais::class, "pais_id");
+  }
 }

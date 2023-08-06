@@ -12,4 +12,5 @@ class Perfil extends Model
   use SoftDeletes;
 
   protected $table = 'perfiles';
+  const PERFIL_ADMINISTRADOR_ID = 1;
 }

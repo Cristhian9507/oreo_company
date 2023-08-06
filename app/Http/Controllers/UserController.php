@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pais;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class PaisController extends Controller
+class UserController extends Controller
 {
   /**
    * Display a listing of the resource.
    */
   public function index()
   {
-    //
+    $usuarios = User::all();
+    return view('usuarios.index', compact('usuarios'));
   }
 
   /**
@@ -61,11 +62,5 @@ class PaisController extends Controller
   public function destroy(string $id)
   {
     //
-  }
-
-  public function buscarPaises(Request $request) {
-    $busqueda = $request->get('q');
-    $paises = Pais::where('nombre', 'ilike', "%$busqueda%")->take(10)->get();
-    return response()->json($paises);
   }
 }

@@ -24,5 +24,16 @@ class UsersSeeder extends Seeder
     $user->password = Hash::make('ConecTIB1');
     $user->perfil_id = 1;
     $user->save();
+
+    $user = new User();
+    $user->identificacion = '222222';
+    $user->nombre = 'Oreo';
+    $user->celular = 42424;
+    $user->fecha_nacimiento = '1990-01-01';
+    $user->ciudad_id = 1011;
+    $user->email = 'cristhian9507@gmail.com';
+    $user->password = Hash::make('1234');
+    $user->perfil_id = 2;
+    $user->save();
   }
 }

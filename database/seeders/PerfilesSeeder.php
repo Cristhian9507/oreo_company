@@ -19,7 +19,7 @@ class PerfilesSeeder extends Seeder
     $perfil->save();
 
     $perfil = new Perfil();
-    $perfil->nombre = 'Supervidor';
+    $perfil->nombre = 'Supervisor';
     $perfil->descripcion = 'El supervisor del sistema';
     $perfil->save();
 

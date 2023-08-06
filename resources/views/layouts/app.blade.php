@@ -8,6 +8,16 @@
 
 <body>
   <div class="container">
+    @auth
+      <div class="py-4" style="text-align:right;">
+        <form action="{{ route('logout') }}" method="POST">
+          @csrf
+          <button type="submit" class="btn btn-primary">Cerrar sesión</button>
+        </form>
+      </div>
+    @endauth
+  </div>
+  <div class="container">
     @yield('content')
   </div>
   <!-- se agregan los los scripts de Bootstrap -->

@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
   /**
    * Display a listing of the resource.
    */
   public function index()
   {
-    dd("dad");
+    $user = User::find(Auth::user()->id);
+    if($user->esAdministrador()) {
+      return redirect('/usuarios');
+    } else {
+      return view('usuarios.show', compact('user'));
+    }
   }
 
   /**

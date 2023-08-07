@@ -10,11 +10,19 @@
 <body>
   <div class="container">
     @auth
-      <div class="py-4" style="text-align:right;">
-        <form action="{{ route('logout') }}" method="POST">
-          @csrf
-          <button type="submit" class="btn btn-primary">Cerrar sesión</button>
-        </form>
+      <div class="row" style="text-align: right;">
+        <div class="col-auto py-4" style="text-align:right;">
+          <a href="{{ route('apirest') }}" class="btn btn-secondary">Usuarios API-rest</a>
+        </div>
+        <div class="col-auto py-4" style="text-align:right;">
+          <a href="{{ route('usuarios') }}" class="btn btn-success">Usuarios</a>
+        </div>
+        <div class="col-auto py-4" style="text-align:right;">
+          <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-primary">Cerrar sesión</button>
+          </form>
+        </div>
       </div>
     @endauth
   </div>

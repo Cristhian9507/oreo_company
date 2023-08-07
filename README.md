@@ -43,7 +43,7 @@ docker-compose up -d
 5. Ejecuta las migraciones para crear las tablas en la base de datos:
 
 
-docker-compose exec app php artisan migrate --seed
+docker-compose exec gestionusuarios php artisan migrate --seed
 
 
 6. Puedes acceder a la aplicación desde `http://localhost:8000`.

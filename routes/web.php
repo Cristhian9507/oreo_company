@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/logout', function () {
@@ -30,19 +30,23 @@ Route::get('/logout', function () {
   return redirect()->route('login');
 });
 
+Route::group(['middleware' => 'admin'], function () {
+  // Rutas solo acceisbles por el admin
+  Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios');
+  Route::get('/registro', [RegistroController::class, 'formularioRegistro'])->name('formularioRegistro');
+  Route::post('/registrar', [RegistroController::class, 'registrar'])->name('registrar');
+  Route::get('/filtrar-usuarios', [UserController::class, 'filtrarUsuarios'])->name('filtrar-usuarios');
+  Route::get('/usuarios/obtener-datos-usuario', [UserController::class, 'obtenerDatosUsuario'])->name('usuarios/obtener-datos-usuario');
+  Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
+  Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.eliminacion');
+});
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/login', [LoginController::class, 'formularioLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::get('/registro', [RegistroController::class, 'formularioRegistro'])->name('formularioRegistro');
-Route::post('/registrar', [RegistroController::class, 'registrar'])->name('registrar');;
 Route::get('/logeados', [LoginController::class, 'logeados'])->name('logeados');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios');
 Route::get('/buscar-paises', [PaisController::class, 'buscarPaises'])->name('buscar.paises');
 Route::get('/buscar-departamentos', [DepartamentoController::class, 'buscarDepartamentos'])->name('buscar.departamentos');
 Route::get('/buscar-ciudades', [CiudadController::class, 'buscarCiudades'])->name('buscar.ciudades');
-Route::get('/filtrar-usuarios', [UserController::class, 'filtrarUsuarios'])->name('filtrar-usuarios');
-Route::get('/usuarios/obtener-datos-usuario', [UserController::class, 'obtenerDatosUsuario'])->name('usuarios/obtener-datos-usuario');
-Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
-Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.eliminacion');
+

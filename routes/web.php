@@ -43,3 +43,5 @@ Route::get('/buscar-paises', [PaisController::class, 'buscarPaises'])->name('bus
 Route::get('/buscar-departamentos', [DepartamentoController::class, 'buscarDepartamentos'])->name('buscar.departamentos');
 Route::get('/buscar-ciudades', [CiudadController::class, 'buscarCiudades'])->name('buscar.ciudades');
 Route::get('/filtrar-usuarios', [UserController::class, 'filtrarUsuarios'])->name('filtrar-usuarios');
+Route::get('/usuarios/obtener-datos-usuario', [UserController::class, 'obtenerDatosUsuario'])->name('usuarios/obtener-datos-usuario');
+Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');

@@ -9,7 +9,7 @@
   <td>{{ $usuario->perfil->nombre }}</td>
   <td>
     <a class="btn btn-primary evt-abrir-modal-edicion" href="#" data-id-usuario="{{ $usuario->id }}">Editar</a>
-    <a class="btn btn-danger evt-eliminar" href="#">Eliminar</a>
+    <a class="btn btn-danger evt-eliminar" data-id-usuario="{{ $usuario->id }}" href="#">Eliminar</a>
   </td>
 </tr>
 @endforeach

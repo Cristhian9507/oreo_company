@@ -56,7 +56,7 @@ class UserController extends Controller
   public function update(Request $request, string $id)
   {
     $usuario = User::find($id);
-    if(isset($usuario->id)) {
+    if (isset($usuario->id)) {
       $messages =  [
         'required' => 'El :attribute es un campo obligatorio.',
         'unique' => 'El :attribute que ingresaste ya se encuentra registrado en el sistema.',
@@ -67,11 +67,11 @@ class UserController extends Controller
         'regex' => 'La :attribute debe de contener al menos un número'
       ];
       $attributes =
-      [
-        'nombre' => 'Nombre',
-        'fecha_nacimiento' => 'Fecha de nacimiento',
-        'ciudad_id' => 'Ciudad'
-      ];
+        [
+          'nombre' => 'Nombre',
+          'fecha_nacimiento' => 'Fecha de nacimiento',
+          'ciudad_id' => 'Ciudad'
+        ];
       $request->validate([
         'nombre' => 'required|string|max:100|min:3',
         'celular' => 'string|max:10',
@@ -81,7 +81,7 @@ class UserController extends Controller
       $usuario->celular = $request->celular;
       $usuario->fecha_nacimiento = $request->fecha_nacimiento;
       $usuario->perfil_id = $request->perfil;
-      if($usuario->save()) {
+      if ($usuario->save()) {
         return response()->json(["mensaje" => "El usuario ha sido modificado satisfactoriamente."], 200);
       } else {
         return response()->json(["mensaje" => "Ups, suceido un error tratando de actualizar el usuario."], 400);
@@ -96,23 +96,32 @@ class UserController extends Controller
    */
   public function destroy(string $id)
   {
-    //
+    $usuario = User::find($id);
+
+    if (!$usuario) {
+      return response()->json(['mensaje' => 'Ups, no se pudo encontrar este usuario'], 404);
+    }
+    // se elimina el usuario por softdelete
+    $usuario->delete();
+    return response()->json(['mensaje' => 'El usuario ha sido eliminado satisfactoriamente.']);
   }
 
-  public function filtrarUsuarios(Request $request) {
+  public function filtrarUsuarios(Request $request)
+  {
     $filtro = $request->filtro;
     $usuarios = User::where('nombre', 'ilike', "%$filtro%")
-                  ->orWhere('identificacion', 'ilike', "%$filtro%")
-                  ->orWhere('celular', 'ilike', "%$filtro%")
-                  ->orWhere('email', 'ilike', "%$filtro%")
-                  ->orderBy("id")
-                  ->get();
+      ->orWhere('identificacion', 'ilike', "%$filtro%")
+      ->orWhere('celular', 'ilike', "%$filtro%")
+      ->orWhere('email', 'ilike', "%$filtro%")
+      ->orderBy("id")
+      ->get();
     return view('usuarios.tabla_usuarios_filtrados', compact('usuarios'));
   }
 
-  public function obtenerDatosUsuario(Request $request){
+  public function obtenerDatosUsuario(Request $request)
+  {
     $usuario = User::find($request->idUsuario);
-    if(isset($usuario->id)){
+    if (isset($usuario->id)) {
       $perfiles = Perfil::all();
       return view('usuarios.data-usuarios-modal', compact('usuario', 'perfiles'));
     } else {

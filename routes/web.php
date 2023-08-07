@@ -45,3 +45,4 @@ Route::get('/buscar-ciudades', [CiudadController::class, 'buscarCiudades'])->nam
 Route::get('/filtrar-usuarios', [UserController::class, 'filtrarUsuarios'])->name('filtrar-usuarios');
 Route::get('/usuarios/obtener-datos-usuario', [UserController::class, 'obtenerDatosUsuario'])->name('usuarios/obtener-datos-usuario');
 Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
+Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.eliminacion');

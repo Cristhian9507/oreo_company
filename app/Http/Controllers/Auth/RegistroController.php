@@ -68,7 +68,7 @@ class RegistroController extends Controller
     $user->celular = $request->celular;
     $user->fecha_nacimiento = $request->fecha_nacimiento;
     $user->ciudad_id = $request->ciudad;
-    $user->password = $request->password;
+    $user->password = Hash::make($request->password);
     $user->perfil_id = 2;
     if($user->save()) {
       return redirect()->route('usuarios')->with('success', 'Registro exitoso.');

@@ -80,7 +80,9 @@ class ApiRestController extends Controller
       $url .= '?userId='.$request->filtro;
     }
     try {
-      $client = new Client();
+      $client = new Client([
+        'verify' => false
+      ]);
       $response = $client->get($url);
       $posts = json_decode($response->getBody(), false);
       return view('apirest.index')->with('posts', $posts);
@@ -92,7 +94,9 @@ class ApiRestController extends Controller
   public function verUsuario(Request $request, $id) {
     try {
       $url = 'https://jsonplaceholder.typicode.com/users/'.$id;
-      $client = new Client();
+      $client = new Client([
+        'verify' => false
+      ]);
       $response = $client->get($url);
       $usuario = json_decode($response->getBody(), false);
       return view('apirest.detalle-usuario')->with('usuario', $usuario);

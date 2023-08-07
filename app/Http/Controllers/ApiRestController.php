@@ -17,7 +17,6 @@ class ApiRestController extends Controller
       $client = new Client();
       $response = $client->get($url);
       $posts = json_decode($response->getBody(), false);
-      // dd($posts);
       return view('apirest.index')->with('posts', $posts);
     } catch (\Exception $e) {
         // Manejar el error y retornar una vista de error si es necesario
@@ -82,7 +81,6 @@ class ApiRestController extends Controller
       $client = new Client();
       $response = $client->get($url);
       $posts = json_decode($response->getBody(), false);
-      // return response()->json(["data" => $posts], 200);
       return view('apirest.index')->with('posts', $posts);
     } catch (\Exception $e) {
       return response()->json(["mensaje" => "Error al obtener la data del apirest"], 400);

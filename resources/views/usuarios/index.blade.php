@@ -30,6 +30,7 @@
         <th>Edad</th>
         <th>Cuidad</th>
         <th>Perfil</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody id="tablaUsuarios">
@@ -42,15 +43,40 @@
         <td>{{ now()->diffInYears(\Carbon\Carbon::parse($usuario->fecha_nacimiento)); }}</td>
         <td>{{ $usuario->ciudad->nombre }}</td>
         <td>{{ $usuario->perfil->nombre }}</td>
+        <td>
+          <a class="btn btn-primary evt-abrir-modal-edicion" href="#" data-id-usuario="{{ $usuario->id }}">Editar</a>
+          <a class="btn btn-danger evt-eliminar" href="#">Eliminar</a>
+        </td>
       </tr>
       @endforeach
     </tbody>
   </table>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="editar-usuario-modal" tabindex="-1" role="dialog" aria-labelledby="editarUsuarioModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editar-usuario-modal">Editar Usuario</h5>
+        <button type="button" class="close evt-cerrar-modal" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary evt-cerrar-modal" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary evt-guardar-cambios-usuario">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/dataTables.bootstrap5.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
 <script>
   $(document).ready(function() {
     $('#users-table').DataTable();
@@ -65,6 +91,91 @@
         filtrarUsuarios();
       }
     });
+
+    $("body").on("click", ".evt-abrir-modal-edicion", function(e){
+      var idUsuario = $(this).data('id-usuario'); // Id del usuairo
+      $.ajax({
+        type: 'GET',
+        url: '{{ route('usuarios/obtener-datos-usuario') }}',
+        data: {
+          idUsuario: idUsuario
+        },
+        success: function(data) {
+          $('.modal-body').html(data);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+      $('#editar-usuario-modal').modal('show');
+    })
+
+    $("body").on("click", ".evt-guardar-cambios-usuario", function(e) {
+      boton = $(this);
+		  boton.addClass("disabled");
+		  boton.text("Actualizando...");
+      let camposObligatorios = {
+        nombre: $("#nombre").val(),
+        fecha_nacimiento: $("#fecha_nacimiento").val(),
+        perfil: $("#perfil").val()
+      };
+      datosVacios = [];
+      $.each(camposObligatorios, function (ind, elem) {
+        if (elem != "") {
+          datosVacios = datosVacios;
+        } else {
+          datosVacios.push(elem);
+        }
+      });
+      if (datosVacios.length > 0) {
+        Swal.fire(
+          "¡Campos Vacios!",
+          "El formulario no puede tener campos vacíos, todos los campos marcados con asterisco* son requeridos.",
+          "warning"
+        );
+        boton.removeClass("disabled");
+        boton.text("Guardar cambios");
+      } else {
+        const url = $("#edicionForm").attr('action'); // url de actualización del usuario
+        var form = $("#edicionForm");
+        // var formulario = $("#actualizar_permisos_vista_perfil");
+        // var form = new FormData(formulario[0]);
+          $.ajax({
+            type: 'PUT',
+            url: url,
+            data: form.serialize(),
+            success: function(data) {
+              Swal.fire(
+                "Éxito!",
+                data.mensaje,
+                "success"
+              );
+              // llmamaos los usuarios actualizados
+              filtrarUsuarios();
+              $('#editar-usuario-modal').modal('hide');
+              boton.removeClass("disabled");
+              boton.text("Guardar cambios");
+            },
+            error: function(xhr, status, error) {
+              boton.removeClass("disabled");
+              boton.text("Guardar cambios");
+              // en caso de error en el controlador
+              var errors = xhr.responseJSON.errors;
+              var errorMessages = '';
+
+              $.each(errors, function(key, value) {
+                  errorMessages += value[0] + '\n';
+              });
+
+              Swal.fire('Error', errorMessages, 'error');
+            }
+          });
+      }
+    });
+
+    $("body").on("click", ".evt-cerrar-modal", function(e){
+      $('#editar-usuario-modal').modal('hide');
+    })
 
     function filtrarUsuarios() {
       var filtro = $('#filtro').val();

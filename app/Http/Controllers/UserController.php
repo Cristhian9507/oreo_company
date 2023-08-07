@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Perfil;
+use App\Models\TipoCambioLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -82,6 +84,8 @@ class UserController extends Controller
       $usuario->fecha_nacimiento = $request->fecha_nacimiento;
       $usuario->perfil_id = $request->perfil;
       if ($usuario->save()) {
+        // registramos el log de tipo edición
+        Log::registarLog(class_basename($usuario), TipoCambioLog::TIPO_CAMBIO_EDICION_ID, $usuario);
         return response()->json(["mensaje" => "El usuario ha sido modificado satisfactoriamente."], 200);
       } else {
         return response()->json(["mensaje" => "Ups, suceido un error tratando de actualizar el usuario."], 400);
@@ -102,8 +106,13 @@ class UserController extends Controller
       return response()->json(['mensaje' => 'Ups, no se pudo encontrar este usuario'], 404);
     }
     // se elimina el usuario por softdelete
-    $usuario->delete();
-    return response()->json(['mensaje' => 'El usuario ha sido eliminado satisfactoriamente.']);
+    if($usuario->delete()) {
+      // registramos el log de tipo eliminación
+      Log::registarLog(class_basename($usuario), TipoCambioLog::TIPO_CAMBIO_ELIMINACION_ID, $usuario);
+      return response()->json(['mensaje' => 'El usuario ha sido eliminado satisfactoriamente.']);
+    } else {
+      return response()->json(['mensaje' => 'Ups, sucedió un erro tratando de eliminar el usuario.']);
+    }
   }
 
   public function filtrarUsuarios(Request $request)

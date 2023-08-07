@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ciudad;
-use App\Models\Departamento;
-use App\Models\Pais;
+use App\Models\Log;
+use App\Models\TipoCambioLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -71,6 +70,8 @@ class RegistroController extends Controller
     $user->password = Hash::make($request->password);
     $user->perfil_id = 2;
     if($user->save()) {
+      // registramos el log de tipo creación
+      Log::registarLog(class_basename($user), TipoCambioLog::TIPO_CAMBIO_CREACION_ID, $user);
       return redirect()->route('usuarios')->with('success', 'Registro exitoso.');
     } else {
       dd("error");

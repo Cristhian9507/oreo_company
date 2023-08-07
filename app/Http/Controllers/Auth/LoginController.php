@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Log;
+use App\Models\TipoCambioLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +32,8 @@ class LoginController extends Controller
     $credenciales = $request->only('email', 'password');
 
     if (Auth::attempt($credenciales)) {
+      // registramos el log de tipo otro - login
+      Log::registarLog(class_basename(Auth::user()), TipoCambioLog::TIPO_CAMBIO_OTRO_ID, $request->email);
       return redirect()->intended('logeados')
         ->withSuccess('Usuario hizo login correctamente');
     }

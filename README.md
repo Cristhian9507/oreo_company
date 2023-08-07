@@ -1,66 +1,77 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Gestión de Usuarios
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este es un sistema de gestión de usuarios desarrollado en Laravel 10 y utiliza una base de datos PostgreSQL. El sistema permite a los usuarios normales ver su propia información, registrar nuevos usuarios, editar y eliminar usuarios (solo para administradores). Además, cuenta con una API REST para acceder a los datos y un sistema de logs para registrar las actividades del sistema.
 
-## About Laravel
+## Características
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Acceso de usuarios normales: Los usuarios normales pueden acceder al sistema y ver su propia información.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Edición y eliminación de usuarios: Solo los administradores tienen los permisos para editar y eliminar usuarios.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- API REST: El sistema cuenta con una API REST que permite acceder a los datos de una api específica.
 
-## Learning Laravel
+- Sistema de logs: Todas las actividades del sistema son registradas en un sistema de logs para fines de auditoría.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tecnologías utilizadas
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Laravel 10:** Un potente framework PHP para el desarrollo de aplicaciones web.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **PostgreSQL:** Un sistema de gestión de bases de datos relacional de código abierto.
 
-## Laravel Sponsors
+- **Docker:** Se ha dockerizado la aplicación para facilitar el despliegue y la gestión del entorno.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Requisitos
 
-### Premium Partners
+- **PHP 8.1:** Se requiere PHP 8.1 o una versión posterior para ejecutar esta aplicación.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Instalación
 
-## Contributing
+Para instalar y ejecutar el sistema, sigue estos pasos:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Clona el repositorio desde GitHub.
 
-## Code of Conduct
+2. Asegúrate de tener Docker instalado en tu sistema.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Crea un archivo `.env` a partir del archivo `.env.example` y configura las variables de entorno según tu configuración.
 
-## Security Vulnerabilities
+4. Ejecuta el siguiente comando para construir y levantar los contenedores de Docker:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+docker-compose up -d
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+5. Ejecuta las migraciones para crear las tablas en la base de datos:
+
+
+docker-compose exec app php artisan migrate --seed
+
+
+6. Puedes acceder a la aplicación desde `http://localhost:8000`.
+
+## Uso
+
+Una vez que la aplicación esté instalada y funcionando, puedes acceder a las diferentes funcionalidades:
+
+- **Acceso de usuarios:** Visita `http://localhost:8000/login` para acceder al sistema como usuario normal.
+
+- **Registro de usuarios:** Visita `http://localhost:8000/registro` para registrar un nuevo usuario.
+
+- **Administración de usuarios:** Visita `http://localhost:8000/usuarios` para acceder a la lista de usuarios y realizar acciones de edición y eliminación (solo para administradores).
+
+- **API REST:** Puedes acceder a la API REST para obtener los datos de los posts en  `http://localhost:8000/apirest`
+
+- **Logs:** Todos los logs de actividad se encuentran en la tabla logs de la base de datos.
+
+## Contribuciones
+
+Si deseas contribuir al desarrollo de este proyecto, siéntete libre de hacer fork del repositorio y enviar pull requests. También puedes abrir issues para reportar problemas o sugerir nuevas funcionalidades.
+
+## Licencia
+
+Este proyecto se encuentra bajo la Licencia MIT. Puedes consultar el archivo `LICENSE` para más información.
+
+## Autor
+
+Este proyecto ha sido desarrollado por Cristhian Alexis Castro Correa (cristhian9507@gmail.com).
+
+¡Gracias por utilizar nuestro sistema de gestión de usuarios! Si tienes alguna pregunta o necesitas más ayuda, no dudes en contactarnos.

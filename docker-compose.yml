@@ -1,0 +1,32 @@
+version: "3.2"
+
+services:
+  db:
+    image: postgres:13.5
+    container_name: psqlgestionusuario
+    hostname: psqlgestionusuario
+    environment:
+      POSTGRES_DB:       ${DB_DATABASE}
+      POSTGRES_USER:     ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5537:5432"
+    restart: always
+    networks:
+      - gestion-usuarios-network
+
+  gestionusuarios:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gestionusuarios
+    ports:
+      - 8000:80
+    depends_on:
+      - db
+    networks:
+      - gestion-usuarios-network
+#Docker Networks
+networks:
+  gestion-usuarios-network:
+    driver: bridge

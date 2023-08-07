@@ -14,13 +14,15 @@ class ApiRestController extends Controller
   {
     $url = 'https://jsonplaceholder.typicode.com/posts';
     try {
-      $client = new Client();
+      $client = new Client([
+        'verify' => false
+      ]);
       $response = $client->get($url);
       $posts = json_decode($response->getBody(), false);
       return view('apirest.index')->with('posts', $posts);
     } catch (\Exception $e) {
-        // Manejar el error y retornar una vista de error si es necesario
-        return view('error')->with('message', 'Error al obtener la data del apirest');
+      // Manejar el error y retornar una vista de error si es necesario
+      return view('apirest.error', ['errorMessage' => $e->getMessage()]);
     }
   }
 

@@ -45,7 +45,7 @@
         <td>{{ $usuario->perfil->nombre }}</td>
         <td>
           <a class="btn btn-primary evt-abrir-modal-edicion" href="#" data-id-usuario="{{ $usuario->id }}">Editar</a>
-          <a class="btn btn-danger evt-eliminar" href="#">Eliminar</a>
+          <a class="btn btn-danger evt-eliminar" href="#" data-id-usuario="{{ $usuario->id }}">Eliminar</a>
         </td>
       </tr>
       @endforeach
@@ -100,8 +100,8 @@
         data: {
           idUsuario: idUsuario
         },
-        success: function(data) {
-          $('.modal-body').html(data);
+        success: function(response) {
+          $('.modal-body').html(response);
         },
         error: function(xhr, status, error) {
           console.error(xhr.responseText);
@@ -144,10 +144,10 @@
             type: 'PUT',
             url: url,
             data: form.serialize(),
-            success: function(data) {
+            success: function(response) {
               Swal.fire(
                 "Éxito!",
-                data.mensaje,
+                response.mensaje,
                 "success"
               );
               // llmamaos los usuarios actualizados
@@ -177,6 +177,43 @@
       $('#editar-usuario-modal').modal('hide');
     })
 
+    $("body").on("click", ".evt-eliminar", function(e){
+      e.preventDefault();
+      var idUsuario = $(this).data('id-usuario'); // Id del usuairo
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Confirmar eliminación',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // cudno se confirme la eliminación del usuario
+          $.ajax({
+            url: "{{ route('usuarios.eliminacion', ['id' => ':id']) }}".replace(':id', idUsuario),
+            type: "DELETE",
+            data: {
+              "_token": "{{ csrf_token() }}"
+            },
+            success: function(response) {
+              // En caso de que se elimine éxitosamente, mostramos mensaje
+              Swal.fire('Éxito', response.mensaje, 'success').then(function() {
+                // si se elimina el usuario, recargamos los usuarios
+                filtrarUsuarios()
+              });
+            },
+            error: function(xhr, status, error) {
+              // Si sale error, mostramos el mensaje de error
+              Swal.fire('Error', 'Hubo un error al eliminar el usuario', 'error');
+            }
+          });
+        }
+      });
+    })
+
     function filtrarUsuarios() {
       var filtro = $('#filtro').val();
 
@@ -186,8 +223,8 @@
         data: {
           filtro: filtro
         },
-        success: function(data) {
-          $('#tablaUsuarios').html(data);
+        success: function(response) {
+          $('#tablaUsuarios').html(response);
         },
         error: function(xhr, status, error) {
           console.error(xhr.responseText);
